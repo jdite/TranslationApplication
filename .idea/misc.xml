@@ -3,13 +3,27 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Users/jonts/AndroidStudioProjects/TranslationApplication/app/src/main/res/drawable/edittextback.xml" value="0.14635416666666667" />
-        <entry key="..\:/Users/jonts/AndroidStudioProjects/TranslationApplication/app/src/main/res/drawable/rectanglebg.xml" value="0.2703125" />
-        <entry key="..\:/Users/jonts/AndroidStudioProjects/TranslationApplication/app/src/main/res/layout/activity_main.xml" value="0.264" />
+        <entry key="..\:/Users/jonts/AndroidStudioProjects/TranslationApplication/app/src/main/res/drawable/edittextback.xml" value="0.37864583333333335" />
+        <entry key="..\:/Users/jonts/AndroidStudioProjects/TranslationApplication/app/src/main/res/drawable/rectanglebg.xml" value="0.37864583333333335" />
+        <entry key="..\:/Users/jonts/AndroidStudioProjects/TranslationApplication/app/src/main/res/drawable/rectanglebg2.xml" value="0.37864583333333335" />
+        <entry key="..\:/Users/jonts/AndroidStudioProjects/TranslationApplication/app/src/main/res/drawable/writeable_edittext.xml" value="0.37864583333333335" />
+        <entry key="..\:/Users/jonts/AndroidStudioProjects/TranslationApplication/app/src/main/res/layout-land/activity_main.xml" value="0.4125" />
+        <entry key="..\:/Users/jonts/AndroidStudioProjects/TranslationApplication/app/src/main/res/layout/activity_main.xml" value="0.3625" />
+        <entry key="..\:/Users/jonts/AndroidStudioProjects/TranslationApplication/app/src/main/res/mipmap-anydpi-v26/arrows.xml" value="0.37864583333333335" />
+        <entry key="..\:/Users/jonts/AndroidStudioProjects/TranslationApplication/app/src/main/res/mipmap-anydpi-v26/arrows_round.xml" value="0.37864583333333335" />
+        <entry key="..\:/Users/jonts/AndroidStudioProjects/TranslationApplication/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.37864583333333335" />
+        <entry key="..\:/Users/jonts/AndroidStudioProjects/TranslationApplication/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.37864583333333335" />
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+  <component name="FrameworkDetectionExcludesConfiguration">
+    <file type="web" url="file://$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectPlainTextFileTypeManager">
+    <file url="file://$PROJECT_DIR$/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" />
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_15" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">
