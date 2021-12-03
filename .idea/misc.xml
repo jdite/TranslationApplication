@@ -4,6 +4,8 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/jonts/AndroidStudioProjects/TranslationApplication/app/src/main/res/drawable/edittextback.xml" value="0.37864583333333335" />
+        <entry key="..\:/Users/jonts/AndroidStudioProjects/TranslationApplication/app/src/main/res/drawable/input_text_background.xml" value="0.37864583333333335" />
+        <entry key="..\:/Users/jonts/AndroidStudioProjects/TranslationApplication/app/src/main/res/drawable/output_text_background.xml" value="0.37864583333333335" />
         <entry key="..\:/Users/jonts/AndroidStudioProjects/TranslationApplication/app/src/main/res/drawable/rectanglebg.xml" value="0.37864583333333335" />
         <entry key="..\:/Users/jonts/AndroidStudioProjects/TranslationApplication/app/src/main/res/drawable/rectanglebg2.xml" value="0.37864583333333335" />
         <entry key="..\:/Users/jonts/AndroidStudioProjects/TranslationApplication/app/src/main/res/drawable/writeable_edittext.xml" value="0.37864583333333335" />

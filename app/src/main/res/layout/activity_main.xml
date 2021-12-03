@@ -7,141 +7,134 @@
     tools:context=".MainActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout2"
+        android:id="@+id/input"
         android:layout_width="350dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:background="@drawable/rectanglebg"
+        android:layout_marginTop="44dp"
+        android:background="@drawable/input_background"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.524"
+        app:layout_constraintHorizontal_bias="0.508"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/input_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="30dp"
-            android:text="Unknown"
-            android:textColor="@color/black"
-            android:textSize="16dp"
-            app:layout_constraintStart_toEndOf="@+id/textView3"
-            app:layout_constraintTop_toTopOf="@+id/textView3" />
-
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="28dp"
+            android:layout_marginStart="12dp"
             android:layout_marginTop="10dp"
             android:text="Input-Language:"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textSize="16dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <TextView
+            android:id="@+id/input_language"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="12dp"
+            android:text="Detect Language"
+            android:textColor="@color/white"
+            android:textSize="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/input_text" />
+
         <EditText
-            android:id="@+id/editTextTextMultiLine"
+            android:id="@+id/input_field"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/edittextback"
-            android:ems="10"
+            android:layout_marginTop="6dp"
+            android:background="@drawable/input_field_background"
             android:gravity="start|top"
             android:hint="Input text of any language here. It will be translated into your chosen output language."
             android:inputType="textMultiLine"
-            android:minLines="3"
+            android:minLines="4"
+            android:textSize="22dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView3"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/input_text"
             app:layout_constraintVertical_bias="1.0" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout"
-        android:layout_width="wrap_content"
+        android:id="@+id/output"
+        android:layout_width="350dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="96dp"
-        android:background="@drawable/rectanglebg"
-        app:layout_constraintEnd_toEndOf="@+id/constraintLayout2"
-        app:layout_constraintStart_toStartOf="@+id/constraintLayout2"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout2">
-
-        <Spinner
-            android:id="@+id/spinner"
-            android:layout_width="156dp"
-            android:layout_height="37dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="10dp"
-            android:entries="@array/languages"
-            app:layout_constraintBottom_toBottomOf="@+id/textView4"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/textView4"
-            app:layout_constraintTop_toTopOf="@+id/textView4"
-            app:layout_constraintVertical_bias="0.45" />
+        android:background="@drawable/output_background"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/input">
 
         <TextView
-            android:id="@+id/textView4"
+            android:id="@+id/output_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="28dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="10dp"
             android:text="Output-Language:"
             android:textColor="@color/black"
             android:textSize="16dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <Spinner
+            android:id="@+id/output_language"
+            android:layout_width="156dp"
+            android:layout_height="37dp"
+            android:entries="@array/languages"
+            app:layout_constraintBottom_toBottomOf="@+id/output_text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/output_text"
+            app:layout_constraintVertical_bias="0.45" />
         <TextView
-            android:id="@+id/outputText"
-            android:layout_width="290dp"
+            android:id="@+id/output_field"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
-            android:layout_marginBottom="30dp"
-            android:background="@drawable/edittextback"
+            android:layout_marginTop="6dp"
+            android:background="@drawable/output_field_background"
             android:gravity="start|top"
             android:hint="This is the output field."
-            android:minLines="3"
-            android:textSize="19dp"
+            android:minLines="4"
+            android:textSize="22dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/textView4"
-            app:layout_constraintTop_toBottomOf="@+id/textView4"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/output_text"
             app:layout_constraintVertical_bias="1.0" />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <Button
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
+        android:id="@+id/translate"
+        android:layout_width="140dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="60dp"
         android:text="Translate"
+        android:onClick="translate"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/button2"
+        app:layout_constraintEnd_toStartOf="@+id/reset"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/button2"
-        android:layout_width="wrap_content"
+        android:id="@+id/reset"
+        android:layout_width="140dp"
         android:layout_height="wrap_content"
         android:text="Reset"
-        app:layout_constraintBottom_toBottomOf="@+id/button"
-        app:layout_constraintStart_toEndOf="@id/button"
+        app:layout_constraintBottom_toBottomOf="@+id/translate"
+        app:layout_constraintStart_toEndOf="@id/translate"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="46dp"
-        android:layout_height="44dp"
+        android:id="@+id/arrow"
+        android:layout_width="43dp"
+        android:layout_height="39dp"
         android:rotation="90"
-        app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
-        app:layout_constraintEnd_toEndOf="@+id/constraintLayout2"
-        app:layout_constraintStart_toStartOf="@+id/constraintLayout2"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout2"
-        app:layout_constraintVertical_bias="0.442"
-        app:srcCompat="@mipmap/arrows_right" />
+        app:layout_constraintBottom_toTopOf="@+id/output"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/input"
+        app:layout_constraintVertical_bias="0.473"
+        app:srcCompat="@mipmap/arrows_grey_foreground" />
 </androidx.constraintlayout.widget.ConstraintLayout>
