@@ -33,7 +33,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="28dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             android:text="Input-Language:"
             android:textColor="@color/black"
             android:textSize="16dp"
@@ -42,20 +42,18 @@
 
         <EditText
             android:id="@+id/editTextTextMultiLine"
-            android:layout_width="290dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:layout_marginBottom="30dp"
-            android:background="@null"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/edittextback"
             android:ems="10"
             android:gravity="start|top"
             android:hint="Input text of any language here. It will be translated into your chosen output language."
             android:inputType="textMultiLine"
             android:minLines="3"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/textView3"
             app:layout_constraintTop_toBottomOf="@+id/textView3"
             app:layout_constraintVertical_bias="1.0" />
     </androidx.constraintlayout.widget.ConstraintLayout>
