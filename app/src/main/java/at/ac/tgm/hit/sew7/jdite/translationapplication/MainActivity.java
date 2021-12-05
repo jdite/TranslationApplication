@@ -30,6 +30,7 @@ import com.google.mlkit.nl.translate.TranslatorOptions;
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
@@ -43,11 +44,11 @@ public class MainActivity extends AppCompatActivity {
     TextView inputLang, outputField;
     Spinner outputLang;
     String currentLang;
-    List<String> enterYourLanguagesHere = List.of(
-            TranslateLanguage.FINNISH,
+    String [] enterYourLanguagesHere = {
+            TranslateLanguage.INDONESIAN,
             TranslateLanguage.FRENCH,
-            TranslateLanguage.LATVIAN
-    );
+            TranslateLanguage.CHINESE
+    };
     ArrayList<Language> usedLanguages;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,8 +77,9 @@ public class MainActivity extends AppCompatActivity {
             public void onSuccess(Set<TranslateRemoteModel> models) {
                 List<Language> notDownloadedLanguages = (List<Language>) usedLanguages.clone();
                 for(TranslateRemoteModel t:models) {
-                    Log.i("myTAG", "test: "+new Locale(t.getLanguage()).getDisplayLanguage());
-                    if(!notDownloadedLanguages.remove(new Language(t.getLanguage())))
+                    String languageName = t.getLanguage();
+                    Log.i("myTAG", "test: "+new Locale(languageName).getDisplayLanguage());
+                    if(!notDownloadedLanguages.remove(new Language(languageName)))
                         modelManager.deleteDownloadedModel(t)
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
@@ -91,6 +93,8 @@ public class MainActivity extends AppCompatActivity {
                                     Log.i("myTAG", "deletus fail");
                                 }
                             });
+                    else
+                        usedLanguages.add(new Language(languageName));
                 }
                 for(Language language:notDownloadedLanguages)
                     modelManager.download(new TranslateRemoteModel.Builder(language.code).build(), new DownloadConditions.Builder().build())
