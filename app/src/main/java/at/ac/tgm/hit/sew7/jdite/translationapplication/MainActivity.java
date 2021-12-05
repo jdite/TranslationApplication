@@ -4,8 +4,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.icu.util.ULocale;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -14,6 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -43,13 +46,13 @@ public class MainActivity extends AppCompatActivity {
     EditText inputField;
     TextView inputLang, outputField;
     Spinner outputLang;
-    String currentLang;
+    String currentLang = "und";
     String [] enterYourLanguagesHere = {
-            TranslateLanguage.INDONESIAN,
-            TranslateLanguage.FRENCH,
-            TranslateLanguage.CHINESE
+            TranslateLanguage.ARABIC,
+            TranslateLanguage.JAPANESE,
+            TranslateLanguage.FRENCH
     };
-    ArrayList<Language> usedLanguages;
+    ArrayList<Language> wantedLanguages, usedLanguages;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,13 +63,14 @@ public class MainActivity extends AppCompatActivity {
         outputLang = findViewById(R.id.output_language);
         languageIdentifier = LanguageIdentification.getClient();
         inputField.addTextChangedListener(textWatcher);
-        usedLanguages = new ArrayList();
+        wantedLanguages = new ArrayList();
         for(String languageCode: enterYourLanguagesHere) {
-            usedLanguages.add(new Language(languageCode));
+            wantedLanguages.add(new Language(languageCode));
         }
         Language english = new Language("en");
-        if(!usedLanguages.contains(english))
-            usedLanguages.add(english);
+        if(!wantedLanguages.contains(english))
+            wantedLanguages.add(english);
+        usedLanguages = new ArrayList<Language>();
         ArrayAdapter<Language> arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, usedLanguages);
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         outputLang.setAdapter(arrayAdapter);
@@ -75,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
             .addOnSuccessListener(new OnSuccessListener<Set<TranslateRemoteModel>>() {
             @Override
             public void onSuccess(Set<TranslateRemoteModel> models) {
-                List<Language> notDownloadedLanguages = (List<Language>) usedLanguages.clone();
+                List<Language> notDownloadedLanguages = wantedLanguages;
                 for(TranslateRemoteModel t:models) {
                     String languageName = t.getLanguage();
                     Log.i("myTAG", "test: "+new Locale(languageName).getDisplayLanguage());
@@ -96,12 +100,23 @@ public class MainActivity extends AppCompatActivity {
                     else
                         usedLanguages.add(new Language(languageName));
                 }
-                for(Language language:notDownloadedLanguages)
-                    modelManager.download(new TranslateRemoteModel.Builder(language.code).build(), new DownloadConditions.Builder().build())
+                arrayAdapter.notifyDataSetChanged();
+                if(notDownloadedLanguages.isEmpty())
+                    return;
+                if(savedInstanceState == null)
+                    Toast.makeText(getApplicationContext(), notDownloadedLanguages.size()+" new language models are being downloaded. This may take several minutes.", Toast.LENGTH_LONG).show();
+                for(Language language:notDownloadedLanguages) {
+                    modelManager.download(new TranslateRemoteModel.Builder(language.code).build(), new DownloadConditions.Builder().requireWifi().build())
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void v) {
                                     Log.i("myTAG", "fat load");
+                                    usedLanguages.add(language);
+                                    arrayAdapter.notifyDataSetChanged();
+                                    if (currentLang.equals(language.toString()))
+                                        inputLang.setTextColor(getResources().getColor(R.color.white));
+                                    if(savedInstanceState == null)
+                                        Toast.makeText(getApplicationContext(), "The " + language.toString() + " language model has been downloaded.", Toast.LENGTH_SHORT).show();
                                 }
                             })
                             .addOnFailureListener(new OnFailureListener() {
@@ -110,6 +125,7 @@ public class MainActivity extends AppCompatActivity {
                                     Log.i("myTAG", "fat load fail");
                                 }
                             });
+                }
             }
         })
             .addOnFailureListener(new OnFailureListener() {
@@ -134,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
             String s = editable.toString();
             if(s.length() < 3) {
                 inputLang.setText("Detect Language");
-                currentLang = "";
+                currentLang = "und";
                 return;
             }
             languageIdentifier.identifyLanguage(s)
@@ -145,7 +161,6 @@ public class MainActivity extends AppCompatActivity {
                                     if (!languageCode.equals("und")) {
                                         Language language = new Language(languageCode);
                                         inputLang.setText(language.toString());
-                                        Log.i("myTAG", language.toString()+" [|] "+usedLanguages.contains(language));
                                         if(usedLanguages.contains(language)) {
                                             inputLang.setTextColor(getResources().getColor(R.color.white));
                                             currentLang = languageCode;
@@ -166,6 +181,10 @@ public class MainActivity extends AppCompatActivity {
         }
     };
     public void translate(View view) {
+        if(currentLang.equals("und")) {
+            Toast.makeText(getApplicationContext(), "The model for this input-language is not installed. You can add it in the code.", Toast.LENGTH_LONG).show();
+            return;
+        }
         Translator translator = Translation.getClient(new TranslatorOptions.Builder()
             .setSourceLanguage(currentLang)
             .setTargetLanguage(((Language) outputLang.getSelectedItem()).code)
@@ -189,6 +208,7 @@ public class MainActivity extends AppCompatActivity {
                         });
     }
     public void reset (View view) {
+        inputField.setText("");
         for(Language l:usedLanguages)
             Log.i("myTAG", "czuerit: "+l.toString());
         modelManager.getDownloadedModels(TranslateRemoteModel.class)
