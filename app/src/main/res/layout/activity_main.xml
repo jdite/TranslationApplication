@@ -53,9 +53,10 @@
             android:textSize="22dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/input_text"
-            app:layout_constraintVertical_bias="1.0" />
+            app:layout_constraintVertical_bias="0.0" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -84,7 +85,6 @@
             android:id="@+id/output_language"
             android:layout_width="156dp"
             android:layout_height="37dp"
-            android:entries="@array/languages"
             app:layout_constraintBottom_toBottomOf="@+id/output_text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/output_text"
@@ -106,25 +106,27 @@
             app:layout_constraintVertical_bias="1.0" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <Button
-        android:id="@+id/translate"
-        android:layout_width="140dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="60dp"
-        android:text="Translate"
-        android:onClick="translate"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/reset"
-        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/reset"
         android:layout_width="140dp"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="60dp"
+        android:onClick="reset"
         android:text="Reset"
-        app:layout_constraintBottom_toBottomOf="@+id/translate"
-        app:layout_constraintStart_toEndOf="@id/translate"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/translate"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/translate"
+        android:layout_width="140dp"
+        android:layout_height="wrap_content"
+        android:onClick="translate"
+        android:text="Translate"
+        app:layout_constraintBottom_toBottomOf="@+id/reset"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/reset" />
 
     <ImageView
         android:id="@+id/arrow"
@@ -137,4 +139,6 @@
         app:layout_constraintTop_toBottomOf="@+id/input"
         app:layout_constraintVertical_bias="0.473"
         app:srcCompat="@mipmap/arrows_grey_foreground" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
