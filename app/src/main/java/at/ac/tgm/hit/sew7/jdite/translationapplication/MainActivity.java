@@ -4,10 +4,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
-import android.icu.util.ULocale;
+import android.content.ServiceConnection;
 import android.os.Bundle;
-import android.os.PersistableBundle;
+import android.os.IBinder;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -30,29 +32,27 @@ import com.google.mlkit.nl.translate.Translation;
 import com.google.mlkit.nl.translate.Translator;
 import com.google.mlkit.nl.translate.TranslatorOptions;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Locale;
 import java.util.Set;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements DownloadInterface {
     LanguageIdentifier languageIdentifier;
     RemoteModelManager modelManager;
     EditText inputField;
     TextView inputLang, outputField;
     Spinner outputLang;
-    String currentLang = "und";
-    String [] enterYourLanguagesHere = {
-            TranslateLanguage.ARABIC,
-            TranslateLanguage.JAPANESE,
-            TranslateLanguage.FRENCH
-    };
-    ArrayList<Language> wantedLanguages, usedLanguages;
+    String currentLang = "";
+    ArrayList<Language> usedLanguages;
+    ArrayAdapter<Language> arrayAdapter;
+    DownloadService mService;
+    boolean mBound = false, first = false, currentLangDownloaded = false;
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.i("myTAG", "tttttttttt");
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,77 +63,14 @@ public class MainActivity extends AppCompatActivity {
         outputLang = findViewById(R.id.output_language);
         languageIdentifier = LanguageIdentification.getClient();
         inputField.addTextChangedListener(textWatcher);
-        wantedLanguages = new ArrayList();
-        for(String languageCode: enterYourLanguagesHere) {
-            wantedLanguages.add(new Language(languageCode));
-        }
-        Language english = new Language("en");
-        if(!wantedLanguages.contains(english))
-            wantedLanguages.add(english);
+        if(savedInstanceState == null)
+            first = true;
+        Intent intent = new Intent(this, DownloadService.class);
+        bindService(intent, connection, Context.BIND_AUTO_CREATE);
         usedLanguages = new ArrayList<Language>();
-        ArrayAdapter<Language> arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, usedLanguages);
+        arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, usedLanguages);
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         outputLang.setAdapter(arrayAdapter);
-        modelManager = RemoteModelManager.getInstance();
-        modelManager.getDownloadedModels(TranslateRemoteModel.class)
-            .addOnSuccessListener(new OnSuccessListener<Set<TranslateRemoteModel>>() {
-            @Override
-            public void onSuccess(Set<TranslateRemoteModel> models) {
-                List<Language> notDownloadedLanguages = wantedLanguages;
-                for(TranslateRemoteModel t:models) {
-                    String languageName = t.getLanguage();
-                    Log.i("myTAG", "test: "+new Locale(languageName).getDisplayLanguage());
-                    if(!notDownloadedLanguages.remove(new Language(languageName)))
-                        modelManager.deleteDownloadedModel(t)
-                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void v) {
-                                    Log.i("myTAG", "deletus");
-                                }
-                            })
-                            .addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Log.i("myTAG", "deletus fail");
-                                }
-                            });
-                    else
-                        usedLanguages.add(new Language(languageName));
-                }
-                arrayAdapter.notifyDataSetChanged();
-                if(notDownloadedLanguages.isEmpty())
-                    return;
-                if(savedInstanceState == null)
-                    Toast.makeText(getApplicationContext(), notDownloadedLanguages.size()+" new language models are being downloaded. This may take several minutes.", Toast.LENGTH_LONG).show();
-                for(Language language:notDownloadedLanguages) {
-                    modelManager.download(new TranslateRemoteModel.Builder(language.code).build(), new DownloadConditions.Builder().requireWifi().build())
-                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void v) {
-                                    Log.i("myTAG", "fat load");
-                                    usedLanguages.add(language);
-                                    arrayAdapter.notifyDataSetChanged();
-                                    if (currentLang.equals(language.toString()))
-                                        inputLang.setTextColor(getResources().getColor(R.color.white));
-                                    if(savedInstanceState == null)
-                                        Toast.makeText(getApplicationContext(), "The " + language.toString() + " language model has been downloaded.", Toast.LENGTH_SHORT).show();
-                                }
-                            })
-                            .addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Log.i("myTAG", "fat load fail");
-                                }
-                            });
-                }
-            }
-        })
-            .addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.i("myTAG", "asdfghjklö");
-            }
-        });
     }
     TextWatcher textWatcher = new TextWatcher() {
         @Override
@@ -150,7 +87,8 @@ public class MainActivity extends AppCompatActivity {
             String s = editable.toString();
             if(s.length() < 3) {
                 inputLang.setText("Detect Language");
-                currentLang = "und";
+                inputLang.setTextColor(getResources().getColor(R.color.white));
+                currentLang = "";
                 return;
             }
             languageIdentifier.identifyLanguage(s)
@@ -161,12 +99,13 @@ public class MainActivity extends AppCompatActivity {
                                     if (!languageCode.equals("und")) {
                                         Language language = new Language(languageCode);
                                         inputLang.setText(language.toString());
+                                        currentLang = languageCode;
                                         if(usedLanguages.contains(language)) {
                                             inputLang.setTextColor(getResources().getColor(R.color.white));
-                                            currentLang = languageCode;
+                                            currentLangDownloaded = true;
                                         } else {
                                             inputLang.setTextColor(getResources().getColor(R.color.red));
-                                            currentLang = "und";
+                                            currentLangDownloaded = false;
                                         }
                                     }
                                 }
@@ -180,8 +119,39 @@ public class MainActivity extends AppCompatActivity {
                             });
         }
     };
+    @Override
+    public void addLanguages(List<Language> languages) {
+        for(Language language:languages) {
+            usedLanguages.add(language);
+        }
+        if(!languages.isEmpty())
+            arrayAdapter.notifyDataSetChanged();
+    }
+    @Override
+    public void downloadedLanguage(Language language) {
+        usedLanguages.add(language);
+        arrayAdapter.notifyDataSetChanged();
+        if (!currentLangDownloaded && currentLang.equals(language.code)) {
+            inputLang.setTextColor(getResources().getColor(R.color.white));
+            currentLangDownloaded = true;
+        }
+        Toast.makeText(getApplicationContext(), "The " + language.toString() + " language model has been downloaded.", Toast.LENGTH_SHORT).show();
+    }
+    @Override
+    public void notifyDownload(int numberOfLangs) {
+        String message;
+        if(numberOfLangs == 1)
+            message = "1 new language model is being downloaded. This may take several minutes.";
+        else message = numberOfLangs+" new language models are being downloaded. This may take several minutes.";
+        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+    }
+
     public void translate(View view) {
-        if(currentLang.equals("und")) {
+        if(currentLang.equals("")) {
+            Toast.makeText(getApplicationContext(), "Enter some text into the input field to translate.", Toast.LENGTH_LONG).show();
+            return;
+        }
+        if(!currentLangDownloaded) {
             Toast.makeText(getApplicationContext(), "The model for this input-language is not installed. You can add it in the code.", Toast.LENGTH_LONG).show();
             return;
         }
@@ -211,13 +181,27 @@ public class MainActivity extends AppCompatActivity {
         inputField.setText("");
         for(Language l:usedLanguages)
             Log.i("myTAG", "czuerit: "+l.toString());
-        modelManager.getDownloadedModels(TranslateRemoteModel.class)
-                .addOnSuccessListener(new OnSuccessListener<Set<TranslateRemoteModel>>() {
-                    @Override
-                    public void onSuccess(Set<TranslateRemoteModel> models) {
-                        for(TranslateRemoteModel t:models)
-                            Log.i("myTAG", "asderter: "+new Locale(t.getLanguage()).getDisplayLanguage());
-                    }
-                });
     }
+    private ServiceConnection connection = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName className,
+                                       IBinder service) {
+            // We've bound to LocalService, cast the IBinder and get LocalService instance
+            DownloadService.LocalBinder binder = (DownloadService.LocalBinder) service;
+            mService = binder.getService();
+            mBound = true;
+            mService.setDownloadInterface(MainActivity.this);
+            Log.i("myTAG", first+"steve");
+            if(first)
+                mService.startDownloads();
+            else
+                addLanguages(mService.getDownloadedLanguages());
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+            mBound = false;
+        }
+    };
 }
