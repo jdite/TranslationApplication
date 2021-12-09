@@ -49,9 +49,10 @@ public class MainActivity extends AppCompatActivity implements DownloadInterface
     DownloadService mService;
     boolean mBound = false, first = false, currentLangDownloaded = false;
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        Log.i("myTAG", "tttttttttt");
+    protected void onStop() {
+        super.onStop();
+        unbindService(connection);
+        mBound = false;
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +67,7 @@ public class MainActivity extends AppCompatActivity implements DownloadInterface
         if(savedInstanceState == null)
             first = true;
         Intent intent = new Intent(this, DownloadService.class);
+        startService(intent);
         bindService(intent, connection, Context.BIND_AUTO_CREATE);
         usedLanguages = new ArrayList<Language>();
         arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, usedLanguages);

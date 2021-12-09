@@ -31,7 +31,7 @@ public class DownloadService extends Service {
             TranslateLanguage.FRENCH,
             TranslateLanguage.GERMAN
     };
-    ArrayList<Language> wantedLanguages, usedLanguages;
+    ArrayList<Language> wantedLanguages, usedLanguages = new ArrayList();
 
 
     public class LocalBinder extends Binder {
@@ -49,7 +49,6 @@ public class DownloadService extends Service {
     }
     public void startDownloads() {
         wantedLanguages = new ArrayList();
-        usedLanguages = new ArrayList();
         for(String languageCode: enterYourLanguagesHere) {
             wantedLanguages.add(new Language(languageCode));
         }
