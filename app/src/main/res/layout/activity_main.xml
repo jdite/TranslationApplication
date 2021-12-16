@@ -8,9 +8,11 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/input"
-        android:layout_width="350dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="44dp"
+        android:layout_marginEnd="20dp"
         android:background="@drawable/input_background"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.508"
@@ -42,15 +44,15 @@
 
         <EditText
             android:id="@+id/input_field"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
             android:background="@drawable/input_field_background"
             android:gravity="start|top"
             android:hint="Input text of any language here. It will be translated into your chosen output language."
             android:inputType="textMultiLine"
-            android:minLines="4"
             android:maxLines="10"
+            android:minLines="4"
             android:textSize="22dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -62,9 +64,11 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/output"
-        android:layout_width="350dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="96dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
         android:background="@drawable/output_background"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -85,7 +89,7 @@
         <Spinner
             android:id="@+id/output_language"
             android:layout_width="156dp"
-            android:layout_height="37dp"
+            android:layout_height="48dp"
             app:layout_constraintBottom_toBottomOf="@+id/output_text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/output_text"
@@ -99,6 +103,7 @@
             android:gravity="start|top"
             android:hint="This is the output field."
             android:minLines="4"
+            android:maxLines="4"
             android:textSize="22dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

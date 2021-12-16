@@ -44,7 +44,8 @@ public class DownloadService extends Service {
     public IBinder onBind(Intent intent) {
         return binder;
     }
-    public void setDownloadInterface(DownloadInterface downloadInterface) {
+
+    public void setDownloadInterface(MainActivity downloadInterface) {
         this.downloadInterface = downloadInterface;
     }
     public void startDownloads() {
